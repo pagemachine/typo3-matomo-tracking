@@ -1,0 +1,5 @@
+// cat=config/matomoTracking/matomoUrl; type=string; label=Matomo URL: full URL of the matomo instance, e.g. https://matomo.example.com/
+matomoUrl =
+
+// cat=config/matomoTracking/authToken; type=string; label=Auth Token: token for authenticated tracking (see https://matomo.org/faq/general/faq_114/ and https://developer.matomo.org/api-reference/tracking-api#other-parameters-require-authentication-via-token_auth)
+authToken =

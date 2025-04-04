@@ -1,0 +1,91 @@
+{
+    "name": "pagemachine/typo3-matomo-tracking",
+    "description": "TYPO3 Matomo Tracking",
+    "license": "proprietary",
+    "type": "typo3-cms-extension",
+    "require": {
+        "php": "^8.1",
+        "pagemachine/matomo-tracking": "^1.0",
+        "psr/http-message": "^1.0 || ^2.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0",
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
+        "typo3/cms-core": "^11.5 || ^12.4 || ^13.4",
+        "typo3/cms-frontend": "^11.5 || ^12.4 || ^13.4"
+    },
+    "require-dev": {
+        "donatj/mock-webserver": "^2.7",
+        "ergebnis/composer-normalize": "^2.3",
+        "friendsofphp/php-cs-fixer": "^3.51",
+        "php-parallel-lint/php-console-highlighter": "^1.0.0",
+        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "phpspec/prophecy-phpunit": "^2.3",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^1.0.0 || ^2.0.0",
+        "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",
+        "rector/rector": "^1.0 || ^2.0",
+        "saschaegerer/phpstan-typo3": "^1.0 || ^2.0",
+        "ssch/typo3-rector": "^2.1 || ^3.0",
+        "typo3/coding-standards": "^0.7.0 || ^0.8.0",
+        "typo3/testing-framework": "^7.0 || ^8.0 || ^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pagemachine\\MatomoTracking\\": "Classes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pagemachine\\MatomoTracking\\": "vendor/pagemachine/matomo-tracking/src/",
+            "Pagemachine\\MatomoTracking\\Tests\\": "Tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true,
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "matomo_tracking",
+            "web-dir": "web"
+        }
+    },
+    "scripts": {
+        "build": [
+            "@composer require --no-progress --ansi --update-with-dependencies typo3/cms-core $TYPO3_VERSION",
+            "@test"
+        ],
+        "composer:lint": [
+            "@composer validate --ansi",
+            "@composer normalize --no-update-lock --dry-run"
+        ],
+        "php:functional:test": "phpunit --configuration phpunit-functional.xml --colors=always",
+        "php:lint": [
+            "@php:syntax:lint",
+            "@php:style:lint",
+            "@php:static:lint",
+            "@php:rector:lint"
+        ],
+        "php:rector:fix": "rector",
+        "php:rector:lint": "rector --dry-run --no-progress-bar",
+        "php:static:lint": "phpstan analyse --ansi --no-progress --memory-limit=512M --configuration=phpstan.neon",
+        "php:style:fix": "php-cs-fixer fix --diff",
+        "php:style:lint": "php-cs-fixer check --diff",
+        "php:syntax:lint": "parallel-lint --exclude vendor --exclude web .",
+        "php:test": [
+            "@php:unit:test",
+            "@php:functional:test"
+        ],
+        "php:unit:test": "phpunit --colors=always",
+        "test": [
+            "@composer:lint",
+            "@php:lint",
+            "@php:test"
+        ]
+    }
+}

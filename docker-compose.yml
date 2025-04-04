@@ -1,0 +1,32 @@
+services:
+  app:
+    image: thecodingmachine/php:${PHP_VERSION:-8.2}-v4-cli
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PHP_EXTENSIONS: gd intl
+      PHP_INI_DATE__TIMEZONE: Europe/Berlin
+      PHP_INI_MAX_EXECUTION_TIME: 240
+      PHP_INI_MAX_INPUT_VARS: 1500
+      PHP_INI_MEMORY_LIMIT: 256M
+      TYPO3_CONTEXT: Development/Docker
+      TYPO3_VERSION: ${TYPO3_VERSION:-^13.4}
+      typo3DatabaseHost: db
+      typo3DatabaseName: typo3
+      typo3DatabaseUsername: root
+      typo3DatabasePassword: root
+    volumes:
+      - ./:/usr/src/app
+
+  db:
+    image: mariadb:11.7.2
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+      start_interval: 2s

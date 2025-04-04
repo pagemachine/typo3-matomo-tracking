@@ -1,0 +1,15 @@
+parameters:
+  level: 5
+
+  paths:
+    - .php-cs-fixer.dist.php
+    - rector.php
+    - Classes
+    - Configuration
+
+  reportUnmatchedIgnoredErrors: false
+
+  typo3:
+    requestGetAttributeMapping:
+      matomo.attributes: iterable
+      originalRequest: Psr\Http\Message\ServerRequestInterface

@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+     - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+     - master
+  schedule:
+    - cron: '0 7 * * *'
+
+jobs:
+  build:
+    name: 'PHP ${{ matrix.php }}, TYPO3 ${{ matrix.typo3 }}'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php:
+          - '8.2'
+          - '8.3'
+        typo3:
+          - ^11.5
+          - ^12.4
+          - ^13.4
+        include:
+          - php: '8.1'
+            typo3: ^11.4
+          - php: '8.1'
+            typo3: ^12.4
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        env:
+          PHP_VERSION: ${{matrix.php}}
+          TYPO3_VERSION: ${{matrix.typo3}}
+        run: docker compose run --rm app composer build
+
+      - name: Cleanup
+        if: ${{ always() }}
+        run: docker compose down --volumes

@@ -1,0 +1,24 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Pagemachine\MatomoTracking\:
+    resource: '../Classes/*'
+
+  Pagemachine\MatomoTracking\Matomo:
+    arguments:
+      $uri: '@=service("Pagemachine\\MatomoTracking\\Configuration").get("matomoUrl")'
+
+  Pagemachine\MatomoTracking\Tracking\ActionFactory:
+
+  Pagemachine\MatomoTracking\Tracking\ActionFactoryInterface:
+    alias: 'Pagemachine\MatomoTracking\Tracking\ActionFactory'
+
+  Pagemachine\MatomoTracking\Tracking\ActionTracker:
+
+  Pagemachine\MatomoTracking\Tracking\Typo3ActionFactory:
+    decorates: 'Pagemachine\MatomoTracking\Tracking\ActionFactoryInterface'
+    arguments:
+      $authToken: '@=service("Pagemachine\\MatomoTracking\\Configuration").get("authToken")'
