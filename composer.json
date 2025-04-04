@@ -1,7 +1,7 @@
 {
     "name": "pagemachine/typo3-matomo-tracking",
     "description": "TYPO3 Matomo Tracking",
-    "license": "proprietary",
+    "license": "GPL-3.0-or-later",
     "type": "typo3-cms-extension",
     "require": {
         "php": "^8.1",
