@@ -37,7 +37,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Pagemachine\\MatomoTracking\\": "vendor/pagemachine/matomo-tracking/src/",
             "Pagemachine\\MatomoTracking\\Tests\\": "Tests/"
         }
     },
