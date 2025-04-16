@@ -5,4 +5,6 @@ matomoUrl =
 authToken =
 
 features {
+    // cat=Features; type=boolean; label=Track downloads: Toggle tracking of downloads. This will rewrite all file links to an internal handler which tracks the request and redirects to the actual files.
+    downloadTracking = 0
 }
