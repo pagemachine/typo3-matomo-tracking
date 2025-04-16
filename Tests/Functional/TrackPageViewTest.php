@@ -17,7 +17,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class TrackPageViewTest extends FunctionalTestCase
 {
-    private MockWebServer|null $mockMatomoServer = null;
+    private MockWebServer $mockMatomoServer;
 
     protected array $testExtensionsToLoad = [
         'pagemachine/typo3-matomo-tracking',

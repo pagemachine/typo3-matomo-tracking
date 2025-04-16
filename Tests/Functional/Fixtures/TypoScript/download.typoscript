@@ -1,0 +1,34 @@
+page = PAGE
+page {
+  10 = TEXT
+  10 {
+    value = Example File Link
+    typolink {
+      parameter = t3://file?identifier=1:/smallest-possible-pdf-1.0.pdf
+    }
+  }
+
+  20 = TEXT
+  20 {
+    value = Example Page Link
+    typolink {
+      parameter = t3://page?uid=2
+    }
+  }
+
+  30 = TEXT
+  30 {
+    value = Example Email Link
+    typolink {
+      parameter = t3://email?email=mailto:user@example.org
+    }
+  }
+
+  40 = TEXT
+  40 {
+    value = Example External Link
+    typolink {
+      parameter = t3://url?url=https://example.org
+    }
+  }
+}

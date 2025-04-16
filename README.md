@@ -23,8 +23,15 @@ responding. Tracking will be skipped in this case.
 By default page views will be tracked with the final page title and the current URL.
 The previous URL (referrer) will also be tracked if possible.
 
-The page view tracking request is sent in the `pagemachine/typo3-matomo-tracking/track-page-view`
-[middleware](https://docs.typo3.org/m/typo3/reference-coreapi/13.4/en-us/ApiOverview/RequestLifeCycle/Middlewares.html).
+## Download tracking
+
+Clicks on file links can be tracked as downloads. This optional feature must be enabled
+explicitly in the Extension Configuration through the _Track downloads_
+(`features.downloadTracking`) option.
+
+This will rewrite all file links to an internal handler which tracks the request
+and redirects to the actual files. This should be tested well before using it in
+production, especially in relation to other TYPO3 packages which adjust file URLs.
 
 ## Action/attribute adjustments
 

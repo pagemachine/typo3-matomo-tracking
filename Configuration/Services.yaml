@@ -11,6 +11,17 @@ services:
     arguments:
       $uri: '@=service("Pagemachine\\MatomoTracking\\Configuration").get("matomoUrl")'
 
+  Pagemachine\MatomoTracking\EventListener\MapDownloadPath:
+    arguments:
+      $enabled: '@=service("Pagemachine\\MatomoTracking\\Configuration").enablesFeature("downloadTracking")'
+    tags:
+      - name: event.listener
+        identifier: pagemachine/typo3-matomo-tracking/map-download-path
+
+  Pagemachine\MatomoTracking\Middleware\TrackDownload:
+    arguments:
+      $enabled: '@=service("Pagemachine\\MatomoTracking\\Configuration").enablesFeature("downloadTracking")'
+
   Pagemachine\MatomoTracking\Tracking\ActionFactory:
 
   Pagemachine\MatomoTracking\Tracking\ActionFactoryInterface:
