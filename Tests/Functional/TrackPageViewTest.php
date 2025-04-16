@@ -32,10 +32,6 @@ final class TrackPageViewTest extends FunctionalTestCase
 
     public function setUp(): void
     {
-        if ((new Typo3Version())->getMajorVersion() === 11) {
-            $this->configurationToUseInTestInstance['SYS']['features']['subrequestPageErrors'] = true;
-        }
-
         parent::setUp();
 
         $connection = $this->getConnectionPool()->getConnectionByName('Default');
