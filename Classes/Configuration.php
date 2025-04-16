@@ -23,4 +23,15 @@ final class Configuration
 
         return '';
     }
+
+    public function enablesFeature(string $feature): bool
+    {
+        try {
+            $features = $this->extensionConfiguration->get('matomo_tracking', 'features') ?: [];
+        } catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
+            return false;
+        }
+
+        return (bool)($features[$feature] ?? false);
+    }
 }
