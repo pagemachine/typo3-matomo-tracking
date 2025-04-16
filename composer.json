@@ -10,8 +10,8 @@
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "psr/log": "^1.0 || ^2.0 || ^3.0",
-        "typo3/cms-core": "^11.5 || ^12.4 || ^13.4",
-        "typo3/cms-frontend": "^11.5 || ^12.4 || ^13.4"
+        "typo3/cms-core": "^12.4 || ^13.4",
+        "typo3/cms-frontend": "^12.4 || ^13.4"
     },
     "require-dev": {
         "donatj/mock-webserver": "^2.7",
