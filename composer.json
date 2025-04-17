@@ -1,6 +1,6 @@
 {
     "name": "pagemachine/typo3-matomo-tracking",
-    "description": "TYPO3 Matomo Tracking",
+    "description": "Server-side Matomo Tracking in TYPO3 with emphasis on privacy: consentless tracking, GDPR/TDDDG-compliant, respects DNT/GPC",
     "license": "GPL-3.0-or-later",
     "type": "typo3-cms-extension",
     "require": {
