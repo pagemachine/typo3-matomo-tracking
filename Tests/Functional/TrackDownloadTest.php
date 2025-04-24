@@ -194,6 +194,69 @@ final class TrackDownloadTest extends FunctionalTestCase
         self::assertSame('http://localhost/fileadmin/smallest-possible-pdf-1.0.pdf', $response->getHeaderLine('location'));
     }
 
+    #[Test]
+    public function trackDownloadWithDoNotTrackDisabled(): void
+    {
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest('http://localhost/'))
+                ->withPageId(1)
+                ->withHeader('DNT', '0')
+        );
+
+        self::assertSame(200, $response->getStatusCode());
+
+        $fileLink = $this->getLinksFromResponse($response)->item(0);
+
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest('http://localhost' . $fileLink->getAttribute('href')))
+                ->withHeader('DNT', '0')
+        );
+
+        self::assertNotEmpty($this->mockMatomoServer->getLastRequest());
+    }
+
+    #[Test]
+    public function skipDownloadWithDoNotTrackEnabled(): void
+    {
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest('http://localhost/'))
+                ->withPageId(1)
+                ->withHeader('DNT', '1')
+        );
+
+        self::assertSame(200, $response->getStatusCode());
+
+        $fileLink = $this->getLinksFromResponse($response)->item(0);
+
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest('http://localhost' . $fileLink->getAttribute('href')))
+                ->withHeader('DNT', '1')
+        );
+
+        self::assertEmpty($this->mockMatomoServer->getLastRequest());
+    }
+
+    #[Test]
+    public function skipDownloadWithGlobalPrivacyControlEnabled(): void
+    {
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest('http://localhost/'))
+                ->withPageId(1)
+                ->withHeader('Sec-GPC', '1')
+        );
+
+        self::assertSame(200, $response->getStatusCode());
+
+        $fileLink = $this->getLinksFromResponse($response)->item(0);
+
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest('http://localhost' . $fileLink->getAttribute('href')))
+                ->withHeader('Sec-GPC', '1')
+        );
+
+        self::assertEmpty($this->mockMatomoServer->getLastRequest());
+    }
+
     private function getLinksFromResponse(ResponseInterface $response): \DOMNodeList
     {
         $document = new \DOMDocument();
