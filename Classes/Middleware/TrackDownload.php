@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Pagemachine\MatomoTracking\Middleware;
 
 use Pagemachine\MatomoTracking\Matomo;
-use Pagemachine\MatomoTracking\Tracking\ActionFactoryInterface;
 use Pagemachine\MatomoTracking\Tracking\Attributes\Download;
 use Pagemachine\MatomoTracking\Tracking\Download\DownloadPathMapper;
 use Pagemachine\MatomoTracking\Tracking\Download\InvalidDownloadPathException;
@@ -23,7 +22,6 @@ final class TrackDownload implements MiddlewareInterface
         private readonly bool $enabled,
         private readonly DownloadPathMapper $downloadPathMapper,
         private readonly Matomo $matomo,
-        private readonly ActionFactoryInterface $actionFactory,
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly LoggerInterface $logger,
     ) {}
@@ -46,11 +44,12 @@ final class TrackDownload implements MiddlewareInterface
 
         $site = $request->getAttribute('site');
         $fileUri = (string)$site->getBase()->withPath($filePath);
-        $action = $this->actionFactory->createActionFromRequest($request)
-            ->withAttribute(new Download($fileUri));
+        $request = $request->withAttribute('matomo.attributes', [
+            new Download($fileUri),
+        ]);
 
         try {
-            $this->matomo->track($action);
+            $this->matomo->track($request);
         } catch (TrackingException $e) {
             $this->logger->critical($e->getMessage(), [
                 'exception' => $e,
