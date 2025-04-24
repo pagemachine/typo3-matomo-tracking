@@ -5,6 +5,7 @@ services:
       db:
         condition: service_healthy
     environment:
+      COMPOSER_PREFER_LOWEST:
       PHP_EXTENSIONS: gd intl
       PHP_INI_DATE__TIMEZONE: Europe/Berlin
       PHP_INI_MAX_EXECUTION_TIME: 240
