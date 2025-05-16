@@ -24,15 +24,16 @@ final class DownloadPathMapper
         return sprintf('%s%s', self::PATH_PREFIX, $filePathWithHmac);
     }
 
+    public function acceptsDownloadPath(string $downloadPath): bool
+    {
+        return str_starts_with($downloadPath, self::PATH_PREFIX);
+    }
+
     /**
      * @throws InvalidDownloadPathException
      */
     public function toFilePath(string $downloadPath): string
     {
-        if (!str_starts_with($downloadPath, self::PATH_PREFIX)) {
-            throw new InvalidDownloadPathException(sprintf('Missing prefix in download path "%s"', $downloadPath), 1744785285);
-        }
-
         $filePathWithHmac = substr($downloadPath, self::PATH_PREFIX_LENGTH);
 
         try {
