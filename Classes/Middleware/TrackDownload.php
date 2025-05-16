@@ -32,8 +32,14 @@ final class TrackDownload implements MiddlewareInterface
             return $handler->handle($request);
         }
 
+        $downloadPath = $request->getUri()->getPath();
+
+        if (!$this->downloadPathMapper->acceptsDownloadPath($downloadPath)) {
+            return $handler->handle($request);
+        }
+
         try {
-            $filePath = $this->downloadPathMapper->toFilePath($request->getUri()->getPath());
+            $filePath = $this->downloadPathMapper->toFilePath($downloadPath);
         } catch (InvalidDownloadPathException $e) {
             $this->logger->warning($e->getMessage(), [
                 'exception' => $e,
@@ -42,8 +48,7 @@ final class TrackDownload implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $site = $request->getAttribute('site');
-        $fileUri = (string)$site->getBase()->withPath($filePath);
+        $fileUri = (string)$request->getAttribute('site')->getBase()->withPath($filePath);
         $request = $request->withAttribute('matomo.attributes', [
             new Download($fileUri),
         ]);
