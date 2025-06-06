@@ -25,6 +25,11 @@ final class TrackPageView implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);
+
+        if ($response->getStatusCode() >= 300 && $response->getStatusCode() <= 399) {
+            return $response;
+        }
+
         $pageTitle = $this->pageTitleResolver->resolvePageTitle($request, $response);
 
         try {
