@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -287,6 +288,35 @@ final class TrackPageViewTest extends FunctionalTestCase
         $response = $this->executeFrontendSubRequest((new InternalRequest('http://localhost/'))->withPageId(1));
 
         self::assertSame(200, $response->getStatusCode());
+    }
+
+    #[Test]
+    public function skipsRedirects(): void
+    {
+        $this->configureTracking();
+        $this->configureMatomoSiteId();
+
+        $this->getConnectionPool()->getConnectionByName('Default')->insert('pages', [
+            'uid' => 2,
+            'pid' => 1,
+            'title' => 'Target',
+            'slug' => 'target',
+        ]);
+        $this->getConnectionPool()->getConnectionByName('Default')->insert('pages', [
+            'uid' => 3,
+            'pid' => 1,
+            'title' => 'Shortcut',
+            'doktype' => PageRepository::DOKTYPE_SHORTCUT,
+            'shortcut' => 2,
+        ]);
+
+        $response = $this->executeFrontendSubRequest((new InternalRequest('http://localhost/'))->withPageId(3));
+
+        self::assertSame(307, $response->getStatusCode());
+
+        $matomoRequest = $this->mockMatomoServer->getLastRequest();
+
+        self::assertNull($matomoRequest);
     }
 
     private function configureTracking(string $authToken = ''): void
