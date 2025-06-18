@@ -43,6 +43,7 @@
     },
     "config": {
         "allow-plugins": {
+            "cweagans/composer-patches": false,
             "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,
             "typo3/class-alias-loader": true,
