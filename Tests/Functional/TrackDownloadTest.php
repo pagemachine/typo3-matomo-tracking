@@ -195,6 +195,21 @@ final class TrackDownloadTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function redirectToFileWithoutSite(): void
+    {
+        $response = $this->executeFrontendSubRequest((new InternalRequest('http://localhost/'))->withPageId(1));
+
+        self::assertSame(200, $response->getStatusCode());
+
+        $fileLink = $this->getLinksFromResponse($response)->item(0);
+
+        $response = $this->executeFrontendSubRequest(new InternalRequest('http://unknown.localhost' . $fileLink->getAttribute('href')));
+
+        self::assertSame(307, $response->getStatusCode());
+        self::assertSame('/fileadmin/smallest-possible-pdf-1.0.pdf', $response->getHeaderLine('location'));
+    }
+
+    #[Test]
     public function trackDownloadWithDoNotTrackDisabled(): void
     {
         $response = $this->executeFrontendSubRequest(
