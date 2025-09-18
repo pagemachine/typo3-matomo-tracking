@@ -10,6 +10,7 @@ use Pagemachine\MatomoTracking\Tracking\Attributes\Url;
 use Pagemachine\MatomoTracking\Tracking\Attributes\VisitorIpAddress;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 
 /**
  * Create various attributes from TYPO3-specific info
@@ -38,10 +39,14 @@ final class Typo3ActionFactory implements ActionFactoryInterface
         $action = $this->decorated->createActionFromRequest($serverRequest)
             ->withAttribute(new Url((string)$this->getRequestUri($serverRequest)));
 
-        $siteId = $serverRequest->getAttribute('site')?->getConfiguration()['matomoTrackingSiteId'] ?? null;
+        $site = $serverRequest->getAttribute('site');
 
-        if (!empty($siteId)) {
-            $action = $action->withAttribute(new SiteId($siteId));
+        if ($site instanceof Site) {
+            $siteId = $site->getConfiguration()['matomoTrackingSiteId'] ?? null;
+
+            if (!empty($siteId)) {
+                $action = $action->withAttribute(new SiteId($siteId));
+            }
         }
 
         if (!empty($this->authToken)) {
