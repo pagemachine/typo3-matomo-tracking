@@ -20,7 +20,7 @@ responding. Tracking will be skipped in this case.
 
 ## Page view tracking
 
-By default page views will be tracked with the final page title and the current URL.
+By default page views will be tracked with the page title and the current URL.
 The previous URL (referrer) will also be tracked if possible.
 
 ## Download tracking

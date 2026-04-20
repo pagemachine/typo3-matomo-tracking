@@ -11,6 +11,7 @@ return [
             'target' => TrackPageView::class,
             'after' => [
                 'typo3/cms-frontend/site',
+                'typo3/cms-frontend/prepare-tsfe-rendering',
                 'typo3/cms-core/normalized-params-attribute',
             ],
         ],
