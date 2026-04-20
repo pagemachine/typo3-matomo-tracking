@@ -10,7 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -49,26 +48,14 @@ final class TrackDownloadTest extends FunctionalTestCase
             'EXT:matomo_tracking/Tests/Functional/Fixtures/TypoScript/download.typoscript',
         ]);
 
-        $siteConfiguration = $this->get(SiteConfiguration::class);
-
-        if ((new Typo3Version())->getMajorVersion() < 13) {
-            $siteConfiguration->createNewBasicSite('1', 1, 'http://localhost/');
-            $siteConfiguration->write('1', [
-                ...$siteConfiguration->load('1'),
-                ...[
-                    'matomoTrackingSiteId' => '1',
-                ],
-            ]);
-        } else {
-            $siteWriter = $this->get(SiteWriter::class);
-            $siteWriter->createNewBasicSite('1', 1, 'http://localhost/');
-            $siteWriter->write('1', [
-                ...$siteConfiguration->load('1'),
-                ...[
-                    'matomoTrackingSiteId' => '1',
-                ],
-            ]);
-        }
+        $siteWriter = $this->get(SiteWriter::class);
+        $siteWriter->createNewBasicSite('1', 1, 'http://localhost/');
+        $siteWriter->write('1', [
+            ...$this->get(SiteConfiguration::class)->load('1'),
+            ...[
+                'matomoTrackingSiteId' => '1',
+            ],
+        ]);
 
         $this->mockMatomoServer = new MockWebServer();
         $this->mockMatomoServer->start();

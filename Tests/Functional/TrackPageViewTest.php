@@ -12,7 +12,6 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Configuration\SiteWriter;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -46,13 +45,8 @@ final class TrackPageViewTest extends FunctionalTestCase
             'EXT:matomo_tracking/Tests/Functional/Fixtures/TypoScript/page.typoscript',
         ]);
 
-        if ((new Typo3Version())->getMajorVersion() < 13) {
-            $siteConfiguration = $this->get(SiteConfiguration::class);
-            $siteConfiguration->createNewBasicSite('1', 1, 'http://localhost/');
-        } else {
-            $siteWriter = $this->get(SiteWriter::class);
-            $siteWriter->createNewBasicSite('1', 1, 'http://localhost/');
-        }
+        $siteWriter = $this->get(SiteWriter::class);
+        $siteWriter->createNewBasicSite('1', 1, 'http://localhost/');
 
         $this->mockMatomoServer = new MockWebServer();
         $this->mockMatomoServer->start();
@@ -202,7 +196,6 @@ final class TrackPageViewTest extends FunctionalTestCase
     {
         $this->configureTracking();
         $this->configureMatomoSiteId();
-        $siteConfiguration = $this->get(SiteConfiguration::class);
 
         $this->getConnectionPool()->getConnectionByName('Default')->insert('pages', [
             'uid' => 2,
@@ -211,34 +204,19 @@ final class TrackPageViewTest extends FunctionalTestCase
             'slug' => '/404/',
         ]);
 
-        if ((new Typo3Version())->getMajorVersion() < 13) {
-            $siteConfiguration->write('1', [
-                ...$siteConfiguration->load('1'),
-                ...[
-                    'errorHandling' => [
-                        [
-                            'errorCode' => 404,
-                            'errorHandler' => 'Page',
-                            'errorContentSource' => 't3://page?uid=2',
-                        ],
+        $siteWriter = $this->get(SiteWriter::class);
+        $siteWriter->write('1', [
+            ...$this->get(SiteConfiguration::class)->load('1'),
+            ...[
+                'errorHandling' => [
+                    [
+                        'errorCode' => 404,
+                        'errorHandler' => 'Page',
+                        'errorContentSource' => 't3://page?uid=2',
                     ],
                 ],
-            ]);
-        } else {
-            $siteWriter = $this->get(SiteWriter::class);
-            $siteWriter->write('1', [
-                ...$siteConfiguration->load('1'),
-                ...[
-                    'errorHandling' => [
-                        [
-                            'errorCode' => 404,
-                            'errorHandler' => 'Page',
-                            'errorContentSource' => 't3://page?uid=2',
-                        ],
-                    ],
-                ],
-            ]);
-        }
+            ],
+        ]);
 
         $response = $this->executeFrontendSubRequest(new InternalRequest('http://localhost/test'));
 
@@ -334,23 +312,12 @@ final class TrackPageViewTest extends FunctionalTestCase
 
     private function configureMatomoSiteId(): void
     {
-        $siteConfiguration = $this->get(SiteConfiguration::class);
-
-        if ((new Typo3Version())->getMajorVersion() < 13) {
-            $siteConfiguration->write('1', [
-                ...$siteConfiguration->load('1'),
-                ...[
-                    'matomoTrackingSiteId' => '1',
-                ],
-            ]);
-        } else {
-            $siteWriter = $this->get(SiteWriter::class);
-            $siteWriter->write('1', [
-                ...$siteConfiguration->load('1'),
-                ...[
-                    'matomoTrackingSiteId' => '1',
-                ],
-            ]);
-        }
+        $siteWriter = $this->get(SiteWriter::class);
+        $siteWriter->write('1', [
+            ...$this->get(SiteConfiguration::class)->load('1'),
+            ...[
+                'matomoTrackingSiteId' => '1',
+            ],
+        ]);
     }
 }
