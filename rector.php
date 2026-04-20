@@ -6,7 +6,6 @@ use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
-use Ssch\TYPO3Rector\TYPO313\v0\MigrateExtbaseHashServiceToUseCoreHashServiceRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -23,7 +22,6 @@ return RectorConfig::configure()
         Typo3LevelSetList::UP_TO_TYPO3_13,
     ])
     ->withSkip([
-        MigrateExtbaseHashServiceToUseCoreHashServiceRector::class,
         RenameClassRector::class => [
             'Classes/Tracking/Download/DownloadPathMapper.php',
         ],
