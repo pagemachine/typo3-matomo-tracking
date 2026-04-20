@@ -19,7 +19,7 @@ return RectorConfig::configure()
     )
     ->withSets([
         PHPUnitSetList::PHPUNIT_100,
-        Typo3LevelSetList::UP_TO_TYPO3_13,
+        Typo3LevelSetList::UP_TO_TYPO3_14,
     ])
     ->withSkip([
         RenameClassRector::class => [
