@@ -30,7 +30,7 @@ final class TrackPageView implements MiddlewareInterface
             return $response;
         }
 
-        $pageTitle = $this->pageTitleResolver->resolvePageTitle($request, $response);
+        $pageTitle = $this->pageTitleResolver->resolvePageTitle($request);
 
         try {
             $this->matomo->track($request->withAttribute('matomo.attributes', [
