@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    name: 'PHP ${{ matrix.php }}, TYPO3 ${{ matrix.typo3 }}, Composer lowest: ${{ matrix.composer_lowest }}'
+    name: 'PHP ${{ matrix.php }}, TYPO3 ${{ matrix.typo3 }}'
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,9 +24,6 @@ jobs:
           - '8.3'
         typo3:
           - ^13.4
-        composer_lowest:
-          - '0'
-          - '1'
 
     steps:
       - uses: actions/checkout@v6
@@ -35,7 +32,6 @@ jobs:
         env:
           PHP_VERSION: ${{matrix.php}}
           TYPO3_VERSION: ${{matrix.typo3}}
-          COMPOSER_PREFER_LOWEST: ${{matrix.composer_lowest}}
         run: docker compose run --rm app composer build
 
       - name: Cleanup
