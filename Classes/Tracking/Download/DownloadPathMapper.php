@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Pagemachine\MatomoTracking\Tracking\Download;
 
 use TYPO3\CMS\Core\Crypto\HashService;
-use TYPO3\CMS\Extbase\Security\Exception\InvalidArgumentForHashGenerationException;
-use TYPO3\CMS\Extbase\Security\Exception\InvalidHashException;
+use TYPO3\CMS\Core\Exception\Crypto\InvalidHashStringException;
 
 final readonly class DownloadPathMapper
 {
@@ -39,7 +38,7 @@ final readonly class DownloadPathMapper
 
         try {
             $filePath = $this->hashService->validateAndStripHmac($filePathWithHmac, self::HASH_SCOPE);
-        } catch (InvalidHashException|InvalidArgumentForHashGenerationException $e) {
+        } catch (InvalidHashStringException $e) {
             throw new InvalidDownloadPathException(sprintf('Invalid download path "%s": %s', $downloadPath, $e->getMessage()), 1744785702, $e);
         }
 
