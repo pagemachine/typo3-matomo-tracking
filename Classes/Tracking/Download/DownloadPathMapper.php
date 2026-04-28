@@ -8,14 +8,14 @@ use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Extbase\Security\Exception\InvalidArgumentForHashGenerationException;
 use TYPO3\CMS\Extbase\Security\Exception\InvalidHashException;
 
-final class DownloadPathMapper
+final readonly class DownloadPathMapper
 {
     private const PATH_PREFIX = '/-/matomo/download';
     private const PATH_PREFIX_LENGTH = 18;
     private const HASH_SCOPE = self::class;
 
     public function __construct(
-        private readonly HashService $hashService,
+        private HashService $hashService,
     ) {}
 
     public function toDownloadPath(string $filePath): string

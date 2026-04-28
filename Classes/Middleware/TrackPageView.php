@@ -14,12 +14,12 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-final class TrackPageView implements MiddlewareInterface
+final readonly class TrackPageView implements MiddlewareInterface
 {
     public function __construct(
-        private readonly Matomo $matomo,
-        private readonly PageTitleResolver $pageTitleResolver,
-        private readonly LoggerInterface $logger,
+        private Matomo $matomo,
+        private PageTitleResolver $pageTitleResolver,
+        private LoggerInterface $logger,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
