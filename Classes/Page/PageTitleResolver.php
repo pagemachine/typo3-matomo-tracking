@@ -8,10 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\PageTitle\PageTitleProviderManager;
 
-final class PageTitleResolver
+final readonly class PageTitleResolver
 {
     public function __construct(
-        private readonly PageTitleProviderManager $titleProvider,
+        private PageTitleProviderManager $titleProvider,
     ) {}
 
     public function resolvePageTitle(ServerRequestInterface $request): string

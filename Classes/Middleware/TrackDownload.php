@@ -16,14 +16,14 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-final class TrackDownload implements MiddlewareInterface
+final readonly class TrackDownload implements MiddlewareInterface
 {
     public function __construct(
-        private readonly bool $enabled,
-        private readonly DownloadPathMapper $downloadPathMapper,
-        private readonly Matomo $matomo,
-        private readonly ResponseFactoryInterface $responseFactory,
-        private readonly LoggerInterface $logger,
+        private bool $enabled,
+        private DownloadPathMapper $downloadPathMapper,
+        private Matomo $matomo,
+        private ResponseFactoryInterface $responseFactory,
+        private LoggerInterface $logger,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

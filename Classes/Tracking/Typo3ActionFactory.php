@@ -15,12 +15,12 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 /**
  * Create various attributes from TYPO3-specific info
  */
-final class Typo3ActionFactory implements ActionFactoryInterface
+final readonly class Typo3ActionFactory implements ActionFactoryInterface
 {
     public function __construct(
-        private readonly ActionFactoryInterface $decorated,
+        private ActionFactoryInterface $decorated,
         #[\SensitiveParameter]
-        private readonly string $authToken,
+        private string $authToken,
     ) {}
 
     public function createAction(): ActionInterface
