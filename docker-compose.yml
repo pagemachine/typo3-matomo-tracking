@@ -20,7 +20,7 @@ services:
       - ./:/usr/src/app
 
   db:
-    image: mariadb:12.3.2
+    image: mariadb:12.3.3
     environment:
       MARIADB_ROOT_PASSWORD: root
     healthcheck:
